@@ -33,19 +33,25 @@ function extractPumpString(message) {
     return null;
   }
   console.log("🔍 Analyzing message:", message);
-  const words = message.split(/[\s,.\-_!?]+/);
-  console.log("📝 Words found:", words);
 
-  for (const word of words) {
-    const normalizedWord = word.toLowerCase().trim();
-    if (normalizedWord.includes("pump")) {
-      console.log("🎯 Found pump string:", word);
-      return word;
-    }
+  // Updated regex pattern to capture the full token address containing 'pump'
+  const match = message.match(/\b[\w\d]{30,}pump\b/i);
+  if (match) {
+    console.log("🎯 Found pump string:", match[0]);
+    return match[0];
   }
+
+  // Fallback to simpler pump string if no address is found
+  const simplePumpMatch = message.match(/\b\S*pump\S*\b/i);
+  if (simplePumpMatch) {
+    console.log("🎯 Found simple pump string:", simplePumpMatch[0]);
+    return simplePumpMatch[0];
+  }
+
   console.log("❌ No pump string found in message");
   return null;
 }
+
 async function sendMessageToBot(message) {
   const botToken = "7598438383:AAF8z10Xb6EXKjLU52rCitLaTlcK5sip_Iw";
   const chatId = "7029402185";
@@ -53,7 +59,7 @@ async function sendMessageToBot(message) {
 
   const payload = {
     chat_id: chatId,
-    text: `🚀 Pump Alert! is here\n\nMessage: ${message}`,
+    text: `🚀 Pump Alert!\n\nDetected Token: ${message}\n\nTimestamp: ${new Date().toISOString()}`,
   };
 
   try {
