@@ -5,3 +5,8 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/Abdulrazaq-pro/DEGEN.git
 git push -u origin main
+
+
+
+GROUP_ID=2085434351  # Replace with your group username
+Id: 7029402185

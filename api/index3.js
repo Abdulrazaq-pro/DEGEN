@@ -4,7 +4,7 @@ const { StringSession } = require("telegram/sessions");
 const { NewMessage } = require("telegram/events");
 const input = require("input");
 const fs = require("fs");
-// const fetch = require("node-fetch");
+const fetch = require("node-fetch");
 
 const apiId = Number(process.env.API_ID);
 const apiHash = process.env.API_HASH;
@@ -42,7 +42,7 @@ function extractPumpString(message) {
 }
 async function sendMessageToBot(message) {
   const botToken = "7598438383:AAF8z10Xb6EXKjLU52rCitLaTlcK5sip_Iw";
-  const chatId = "7029402185";
+  const chatId = "93372553";
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   const payload = {
