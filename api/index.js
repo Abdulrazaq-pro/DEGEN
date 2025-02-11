@@ -54,7 +54,8 @@ function extractPumpString(message) {
 
 async function sendMessageToBot(message) {
   const botToken = "7598438383:AAF8z10Xb6EXKjLU52rCitLaTlcK5sip_Iw";
-  const chatId = "@degenfortrade";
+  const chatId = "-1002271849497";
+  // const chatId = "7029402185";
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   const payload = {
