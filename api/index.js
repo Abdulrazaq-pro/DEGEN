@@ -1,3 +1,9 @@
+const express = require("express");
+const axios = require("axios");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 require("dotenv").config();
 const { TelegramClient } = require("telegram");
 const { StringSession } = require("telegram/sessions");
@@ -47,7 +53,7 @@ async function sendMessageToBot(message) {
 
   const payload = {
     chat_id: chatId,
-    text: `🚀 Pump Alert!\n\nMessage: ${message}`,
+    text: `🚀 Pump Alert! is here\n\nMessage: ${message}`,
   };
 
   try {
@@ -130,7 +136,7 @@ Message ID: ${message.id}
 =================\n`;
           fs.appendFileSync("pump_strings.log", logEntry);
           // Send detected message to the bot
-          await sendMessageToBot(messageText);
+          await sendMessageToBot(pumpString);
           console.log("✅ Pump string logged successfully");
         }
       } else {
@@ -147,3 +153,9 @@ Message ID: ${message.id}
   // Keep the process running
   await new Promise(() => {});
 })();
+
+app.get("/", (req, res) => {
+  res.send("Welcome to our server!");
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

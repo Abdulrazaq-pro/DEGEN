@@ -1,9 +1,16 @@
+const express = require("express");
+const axios = require("axios");
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
 require("dotenv").config();
 const { TelegramClient } = require("telegram");
 const { StringSession } = require("telegram/sessions");
 const { NewMessage } = require("telegram/events");
 const input = require("input");
 const fs = require("fs");
+// const fetch = require("node-fetch");
 
 const apiId = Number(process.env.API_ID);
 const apiHash = process.env.API_HASH;
@@ -38,6 +45,28 @@ function extractPumpString(message) {
   }
   console.log("❌ No pump string found in message");
   return null;
+}
+async function sendMessageToBot(message) {
+  const botToken = "7598438383:AAF8z10Xb6EXKjLU52rCitLaTlcK5sip_Iw";
+  const chatId = "7029402185";
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  const payload = {
+    chat_id: chatId,
+    text: `🚀 Pump Alert! is here\n\nMessage: ${message}`,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json();
+    console.log("📤 Message sent to bot:", result);
+  } catch (error) {
+    console.error("❌ Error sending message to bot:", error);
+  }
 }
 
 (async () => {
@@ -106,6 +135,8 @@ Extracted Pump String: ${pumpString}
 Message ID: ${message.id}
 =================\n`;
           fs.appendFileSync("pump_strings.log", logEntry);
+          // Send detected message to the bot
+          await sendMessageToBot(pumpString);
           console.log("✅ Pump string logged successfully");
         }
       } else {
@@ -122,3 +153,10 @@ Message ID: ${message.id}
   // Keep the process running
   await new Promise(() => {});
 })();
+
+app.get("/", (req, res) => {
+  res.send("Welcome to our server!");
+});
+
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
